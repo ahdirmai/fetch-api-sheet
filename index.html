@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <!-- <div class="content"></div> -->
+  </body>
+
+  <script>
+    async function getData() {
+      const url =
+        "https://script.googleusercontent.com/macros/echo?user_content_key=JbFea_RJRRI0UEmSss9RWtJAxQGRSLJm_UOCsqFqSWZNqxt87kYF6RwlplWV4eqUdZ_cU7do3P2WBaPmV6B6eGKP8saBuc2Wm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnID0e95fT5tWUOulfcEEsUgTONQS0_Qx96VMPeSw_T5au9IjhpuXl8YVx9xO0YVBJD8S4UT9M4BfmgCx30zO5m7E78tZtLS8jw&lib=MqDgD69Cr-aBoGgnMW_P3BH1erw-UvZuy";
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        console.log(json);
+
+        //show on the page
+        document.querySelector(".content").innerHTML = json;
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    getData();
+  </script>
+</html>
