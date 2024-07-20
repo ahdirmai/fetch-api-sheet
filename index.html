@@ -1,75 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Display All Google Sheets Charts</title>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Sheets Data</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-        
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-        }
-        
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-
-<body>
+  <body>
     <div class="content"></div>
+
     <script>
-        async function getData() {
-            const url = "https://script.googleusercontent.com/macros/echo?user_content_key=JbFea_RJRRI0UEmSss9RWtJAxQGRSLJm_UOCsqFqSWZNqxt87kYF6RwlplWV4eqUdZ_cU7do3P2WBaPmV6B6eGKP8saBuc2Wm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnID0e95fT5tWUOulfcEEsUgTONQS0_Qx96VMPeSw_T5au9IjhpuXl8YVx9xO0YVBJD8S4UT9M4BfmgCx30zO5m7E78tZtLS8jw&lib=MqDgD69Cr-aBoGgnMW_P3BH1erw-UvZuy";
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Response status: ${response.status}`);
-                }
+      async function getCharts() {
+        const url =
+          "https://script.googleusercontent.com/macros/echo?user_content_key=_cFDR5zrqeONGgy-m3pLmECtxZVnYjHgQFEUvOg_bc3jAXfhn-K4xHcDuz1AXC3IS4xJasS3JgFVnzDa4vkaiO2YQcYZN07jm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnAp4lOHb3UZEcoClg0hZjzx2PoJQR-7IeWZbu8w6sZFI5W70Mi3DWwMuzCqgQj2k8Fo0JYlQc_TKF2FOdJPoKSdKZq2EBFUO4A&lib=MqDgD69Cr-aBoGgnMW_P3BH1erw-UvZuy";
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
 
-                const json = await response.json();
-                console.log(json);
+          // Parse JSON response
+          const base64Images = await response.json();
 
-                // Generate HTML table
-                let tableHTML = "<table>";
-                tableHTML += "<tr>";
-                json[0].forEach(header => {
-                    tableHTML += `<th>${header}</th>`;
-                });
-                tableHTML += "</tr>";
-
-                for (let i = 1; i < json.length; i++) {
-                    tableHTML += "<tr>";
-                    json[i].forEach(cell => {
-                        tableHTML += `<td>${cell}</td>`;
-                    });
-                    tableHTML += "</tr>";
-                }
-
-                tableHTML += "</table>";
-
-                // Show on the page
-                document.querySelector(".content").innerHTML = tableHTML;
-            } catch (error) {
-                console.error(error.message);
-            }
+          // Create HTML to display each image
+          const contentDiv = document.querySelector(".content");
+          base64Images.forEach((base64Image) => {
+            const img = document.createElement("img");
+            img.src = `data:image/png;base64,${base64Image}`;
+            img.style.maxWidth = "100%";
+            img.style.marginBottom = "10px";
+            contentDiv.appendChild(img);
+          });
+        } catch (error) {
+          console.error(error.message);
         }
+      }
 
-        getData();
+      getCharts();
     </script>
-</body>
-
+  </body>
 </html>
